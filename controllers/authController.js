@@ -1,7 +1,9 @@
 import generarJWT from "../helpers/generarJWT.js"
+import { generarUUID } from "../helpers/generarUUID.js"
 import { getHashPassword } from "../helpers/hashPassword.js"
 import { Usuario } from "../models/Usuario.js"
 import bcrypt from 'bcrypt'
+
 
 const login = async (req, res) => {
     const {username, password} = req.body
@@ -27,7 +29,7 @@ const login = async (req, res) => {
 const signup = async  (req, res) => {
 
     let hashPass = ""
-    const {fullname, dni, username, password} = req.body
+    const {full_name, dni, username, password} = req.body
 
     const usuario = await Usuario.findOne({ where: {dni} })
 
@@ -42,10 +44,12 @@ const signup = async  (req, res) => {
     try{
 
         await Usuario.create({
-            fullname,
+            user_id: generarUUID(),
+            full_name,
             dni,
             username,
-            password: hashPass
+            password: hashPass,
+            role: "citizen"
         })
 
         res.status(200).json({
