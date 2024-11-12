@@ -50,13 +50,13 @@ const crearComunidad = async (req, res) => {
 const allComunidades = (req, res) => {
     const {lat, lng} = req.body
 
-    
+
 
     res.json({
         msg: "Todas las comunidades"
     })
 
-}
+}   
 
 
 const userComunidades = () => {
