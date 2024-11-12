@@ -1,17 +1,20 @@
+import { generarUUID } from "../helpers/generarUUID.js"
+import { uuidToBuffer } from "../helpers/uuidToBuffer.js"
 import { Comunidad } from "../models/Comunidad.js"
 import { Usuario } from "../models/Usuario.js"
 
 const crearComunidad = async (req, res) => {
-    const {id_usuario, nombre, descripcion, departamento, provincia, lat, lng, radio} = req.body
+    const {user_id, dni} = req.usuario
+    const {name, address, description, department, district, province, lat, lng, radio} = req.body
 
-    const usuario = await Usuario.findOne({where: id_usuario})
+    const usuario = await Usuario.findOne({where: {dni} })
     if(!usuario){
         return res.status(400).json({
             message: "El usuario no existe"
         })
     }
 
-    const comunidadExistente = await Comunidad.findOne({where: {nombre, departamento, provincia} })
+    const comunidadExistente = await Comunidad.findOne({where: {name, department, province, district} })
 
     if(comunidadExistente){
         return res.status(400).json({
@@ -21,14 +24,17 @@ const crearComunidad = async (req, res) => {
 
     try{    
         await Comunidad.create({
-            nombre,
-            descripcion,
-            departamento,
-            provincia,
+            community_id: generarUUID(),
+            address,
+            name,
+            description,
+            department,
+            district,
+            province,
             lat,
             lng,
             radio,
-            id_usuario
+            user_id: uuidToBuffer(user_id)
         })
 
         res.json({
@@ -41,6 +47,24 @@ const crearComunidad = async (req, res) => {
     
 }
 
+const allComunidades = (req, res) => {
+    const {lat, lng} = req.body
+
+    
+
+    res.json({
+        msg: "Todas las comunidades"
+    })
+
+}
+
+
+const userComunidades = () => {
+
+}
+
 export {
-    crearComunidad
+    crearComunidad,
+    allComunidades,
+    userComunidades
 }

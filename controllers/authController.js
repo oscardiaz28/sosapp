@@ -3,7 +3,7 @@ import { generarUUID } from "../helpers/generarUUID.js"
 import { getHashPassword } from "../helpers/hashPassword.js"
 import { Usuario } from "../models/Usuario.js"
 import bcrypt from 'bcrypt'
-
+import { bufferToUUID } from "../helpers/bufferToUUID.js"
 
 const login = async (req, res) => {
     const {username, password} = req.body
@@ -20,9 +20,10 @@ const login = async (req, res) => {
 
     if( !validPassword ) return res.status(400).json({ message: "Contraseña incorrecta" })
 
+    
     res.json({
         message: "Ha iniciado sesión correctamente",
-        token: generarJWT(usuario.id, usuario.username)
+        token: generarJWT( bufferToUUID(usuario.user_id) , usuario.dni, usuario.username)
     })
 }
 
@@ -42,7 +43,6 @@ const signup = async  (req, res) => {
     hashPass = await getHashPassword(password)
 
     try{
-
         await Usuario.create({
             user_id: generarUUID(),
             full_name,
@@ -51,7 +51,6 @@ const signup = async  (req, res) => {
             password: hashPass,
             role: "citizen"
         })
-
         res.status(200).json({
             message: "El usuario ha sido registrado correctamente"
         })

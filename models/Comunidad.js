@@ -1,17 +1,27 @@
 import db from "../config/db.js"
 import { DataTypes } from "sequelize"
 
-export const Comunidad = db.define('comunidades', {
-    nombre: {
+export const Comunidad = db.define('community', {
+    community_id: {
+        type: DataTypes.UUID,
+        primaryKey: true
+    },
+    address: {
+        type: DataTypes.STRING,
+    },
+    name: {
         type: DataTypes.STRING
     },
-    descripcion: {
+    description: {
         type: DataTypes.STRING
     },
-    departamento: {
+    department: {
         type: DataTypes.STRING
     },
-    provincia: {
+    district: {
+        type: DataTypes.STRING
+    },
+    province: {
         type: DataTypes.STRING
     },
     lat: {
@@ -23,7 +33,11 @@ export const Comunidad = db.define('comunidades', {
     radio: {
         type: DataTypes.INTEGER
     },
-    id_usuario: {
-        type: DataTypes.INTEGER
+    user_id: {
+        type: DataTypes.UUID
     }
-})
+}, {
+    tableName: 'community'
+}
+
+)
